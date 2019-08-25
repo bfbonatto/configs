@@ -44,10 +44,6 @@ Plug 'blindfs/vim-taskwarrior'
 
 Plug 'kchmck/vim-coffee-script'
 
-Plug 'the-lambda-church/coquille'
-Plug 'jvoorhis/coq.vim'
-Plug 'def-lkb/vimbufsync'
-
 Plug 'https://github.com/davidbalbert/vim-io'
 
 " List ends here. Plugins become visible to Vim after this call.
