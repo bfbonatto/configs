@@ -64,4 +64,17 @@ map <C-t><right> :tabn<cr>
 let g:airline_powerline_fonts = 1
 set guifont=Meslo_LG_S_for_Powerline:h11
 
+inoremap <C-l> <c-g>u<Esc>[s1z=`]<c-g>a
+nnoremap == 1z=
+
+let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
+
+let mapleader = ";"
+
+nnoremap <leader>o o<esc>k
+nnoremap <leader>O O<esc>j
+
 syntax enable
+

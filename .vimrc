@@ -2,7 +2,6 @@
 call plug#begin('~/.vim/plugged')
 
 Plug 'nanotech/jellybeans.vim'
-
 Plug 'sjl/badwolf'
 
 Plug 'jiangmiao/auto-pairs'
@@ -17,7 +16,6 @@ Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 
 Plug 'neovimhaskell/haskell-vim'
-Plug 'wting/lhaskell.vim'
 
 Plug 'airblade/vim-gitgutter'
 
@@ -37,14 +35,24 @@ Plug 'godlygeek/tabular'
 
 Plug 'octol/vim-cpp-enhanced-highlight'
 
-"Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 
 Plug 'blindfs/vim-taskwarrior'
 
-Plug 'kchmck/vim-coffee-script'
+Plug 'bitc/vim-hdevtools'
 
-Plug 'https://github.com/davidbalbert/vim-io'
+Plug 'tpope/vim-surround'
+
+Plug 'easymotion/vim-easymotion'
+
+Plug 'leafgarland/typescript-vim'
+
+Plug 'tpope/vim-fugitive'
+
+Plug 'dhruvasagar/vim-table-mode'
+
+Plug 'reedes/vim-wordy'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -54,28 +62,52 @@ filetype plugin indent on	" required
 colorscheme jellybeans
 
 let g:jellybeans_use_term_italics = 1
+highlight Comment cterm=italic
 
-au FileType scheme let b:AutoPairs = {'[':']', '{':'}','"':'"', '`':'`'}
 au FileType ruby let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '|':'|', '/':'/'}
+au FileType markdown let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '$':'$'}
+au FileType scheme let b:AutoPairs = {'(':')', '"': '"', '[':']', '{':'}'}
 
 let g:rainbow_active = 0
 
 augroup scheme
 	autocmd!
 
-	autocmd FileType scheme setlocal ts=4 sts=4 sw=4 expandtab
+	autocmd FileType scheme setlocal ts=2 sts=2 sw=2 expandtab
 augroup end
 
 set backspace=indent,eol,start
 set clipboard=unnamedplus
 
-
-"Pandoc command
-command! Pandoc !pandoc "%" -o "%:r.pdf"
+" Pandoc command
+"command! Pandoc !pandoc "%" -o "%:r.pdf"
+" if the pandoc plugin misbehaves
+"let g:pandoc#command#latex_engine = "pdflatex"
+let g:pandoc#command#use_message_buffers = 0
 
 inoremap jk <esc>
 
-nmap Q :close<enter>
+nnoremap Q :close<enter>
+nnoremap <space> W
+
+let mapleader = ";"
+nnoremap , ;
+
+nnoremap <leader>d :ALEDetail<enter>
+nnoremap <leader>n :ALENext<enter>zz
+nnoremap <leader>N :ALEPrevious<enter>zz
+
+nnoremap <leader>m :make<enter>
+au FileType pandoc nnoremap <leader>m :Pandoc pdf<enter>
+
+nnoremap <leader>g :Git 
+
+nnoremap <leader>R :RainbowToggle<enter>
+
+nnoremap <leader>o o<esc>k
+nnoremap <leader>O O<esc>j
+
+vnoremap <leader><tab> :normal 0i<tab><esc>$
 
 "tabs > spaces
 augroup python
@@ -83,6 +115,10 @@ augroup python
 
 	autocmd FileType python setlocal ts=4 sts=4 sw=4 noexpandtab
 augroup end
+
+au FileType haskell nnoremap <buffer> <leader>f :HdevtoolsType<CR>
+au FileType haskell nnoremap <buffer> <silent> <leader>t :HdevtoolsInfo<CR>
+au FileType haskell nnoremap <buffer> <silent> <leader>c :HdevtoolsClear<CR>
 
 set tabstop=4 "visual of a tab
 set softtabstop=4 "mechanics of a tab
@@ -103,15 +139,18 @@ let g:cpp_class_decl_highlight = 1
 "search highlighting
 set hlsearch
 set incsearch
-nnoremap <CR> :noh<CR><CR>
+nnoremap <CR> :noh<CR>
 
 let g:haskell_indent_disable = 1 "disbles haskellvim's auto indentation
 let g:ycm_autoclose_preview_window_after_completion = 1
 "let g:ycm_exclude_preview = 1
 "let g:airline_exclude_preview = 1
 
+
 let g:ale_linters = {'haskell': ['hdevtools', 'hlint'], 'python': ['pylint', 'mypy']}
 let g:ale_fixers = {'haskell': ['hlint']}
+
+let g:ale_echo_msg_format = "%linter%: %code: %%s"
 
 " movement mappings
 " move vertically by visual line
@@ -123,14 +162,22 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+nnoremap <c-w>v :vsp <enter>
+nnoremap <c-w>z :sp <enter>
+
 autocmd! User GoyoEnter Limelight "Goyo integration
 autocmd! User GoyoLeave Limelight!
 
 let g:limelight_conceal_ctermfg = 'gray'
 
-inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+inoremap <C-l> <c-g>u<Esc>[s1z=`]<c-g>a
+nnoremap == 1z=
 
 let g:airline_powerline_fonts = 1
 set guifont=Meslo_LG_S_for_Powerline:h11
+
+let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
 
 syntax enable
