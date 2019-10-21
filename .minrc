@@ -15,6 +15,25 @@ Plug 'vim-airline/vim-airline-themes'
 
 Plug 'scrooloose/nerdtree'
 
+Plug 'airblade/vim-gitgutter'
+
+Plug 'mateusbraga/vim-spell-pt-br'
+
+Plug 'luochen1990/rainbow'
+
+Plug 'tpope/vim-surround'
+
+Plug 'easymotion/vim-easymotion'
+
+Plug 'tpope/vim-fugitive'
+
+Plug 'dhruvasagar/vim-table-mode'
+
+Plug 'reedes/vim-wordy'
+
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
@@ -22,12 +41,27 @@ filetype plugin indent on	" required
 
 colorscheme badwolf
 
+highlight Comment cterm=italic
+
 set backspace=indent,eol,start
 set clipboard=unnamedplus
 
 inoremap jk <esc>
 
 nmap Q :close<enter>
+nnoremap <space> W
+
+let mapleader = ";"
+nnoremap , ;
+
+nnoremap <leader>g :Git 
+
+nnoremap <leader>R :RainbowToggle<enter>
+
+nnoremap <leader>o o<esc>k
+nnoremap <leader>O O<esc>j
+
+vnoremap <leader><tab> :normal 0i<tab><esc>$
 
 set tabstop=4 "visual of a tab
 set softtabstop=4 "mechanics of a tab
@@ -61,7 +95,15 @@ map <C-t><down> :tabl<cr>
 map <C-t><left> :tabp<cr>
 map <C-t><right> :tabn<cr>
 
+nnoremap <c-w>v :vsp <enter>
+nnoremap <c-w>z :sp <enter>
+
+autocmd! User GoyoEnter Limelight "Goyo integration
+autocmd! User GoyoLeave Limelight!
+
+let g:limelight_conceal_ctermfg = 'gray'
 let g:airline_powerline_fonts = 1
+
 set guifont=Meslo_LG_S_for_Powerline:h11
 
 inoremap <C-l> <c-g>u<Esc>[s1z=`]<c-g>a
@@ -70,8 +112,6 @@ nnoremap == 1z=
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
-
-let mapleader = ";"
 
 nnoremap <leader>o o<esc>k
 nnoremap <leader>O O<esc>j
