@@ -67,6 +67,18 @@ Plug 'xolox/vim-misc'
 
 Plug 'wlangstroth/vim-racket'
 
+Plug 'https://framagit.org/tyreunom/coquille'
+
+Plug 'elmcast/elm-vim'
+
+Plug 'ap/vim-css-color'
+
+Plug 'vimwiki/vimwiki'
+
+Plug 'adimit/prolog.vim'
+
+Plug 'unblevable/quick-scope'
+
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
@@ -99,6 +111,8 @@ set clipboard=unnamedplus
 let g:pandoc#command#use_message_buffers = 0
 
 inoremap jk <esc>
+inoremap kj <esc>
+inoremap <C-BS> <C-W>
 
 nnoremap Q :close<enter>
 nnoremap <space> W
@@ -109,12 +123,22 @@ nnoremap , ;
 inoremap ;l λ
 inoremap ;. ·
 
+augroup coq
+	autocmd!
+	
+	autocmd FileType coq call coquille#Commands()
+	autocmd FileType coq nnoremap <c-j> :CoqNext<enter>
+	autocmd FileType coq nnoremap <c-k> :CoqUndo<enter>
+	autocmd FileType coq inoremap <c-j> <esc>:CoqNext<enter>a
+augroup end
+
 nnoremap <leader>d :ALEDetail<enter>
 nnoremap <leader>n :ALENext<enter>zz
 nnoremap <leader>N :ALEPrevious<enter>zz
 
 nnoremap <leader>m :make<enter>
 au FileType pandoc nnoremap <leader>m :Pandoc pdf<enter>
+au FileType vim nnoremap <leader>m :source %<enter> <bar> :PlugInstall<enter>
 
 function! FindMake()
 	let pos = search('make')
@@ -132,6 +156,9 @@ nnoremap <leader>R :RainbowToggle<enter>
 nnoremap <leader>o o<esc>k
 nnoremap <leader>O O<esc>j
 
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+
 "tabs > spaces
 augroup python
 	autocmd!
@@ -140,6 +167,7 @@ augroup python
 augroup end
 
 let python_highlight_all = 1
+let g:python3_host_prog = '/Users/bfbonatto/.pyenv/shims/python'
 
 command! Indent %s/    /\t/g
 
@@ -163,6 +191,7 @@ set number relativenumber
 set textwidth=0
 set wrap
 set linebreak
+
 
 "auto indentation
 set shiftwidth=4
@@ -196,6 +225,8 @@ nnoremap k gk
 " visual movement
 nnoremap $ g$
 nnoremap 0 g0
+nnoremap J j
+nnoremap K k
 " move through split panes with ctrl-<button>
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
