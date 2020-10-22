@@ -167,6 +167,7 @@ augroup end
 let python_highlight_all = 1
 let g:python3_host_prog = '/Users/bfbonatto/.pyenv/shims/python'
 
+command! Indent2 %s/  /\t/g
 command! Indent %s/    /\t/g
 
 "SLIME integration
