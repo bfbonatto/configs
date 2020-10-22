@@ -29,4 +29,8 @@ include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/dark-256.theme
 #include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/solarized-light-256.theme
 #include /usr/local/Cellar/task/2.5.1/share/doc/task/rc/no-color.theme
 
-dateformat=d-B-y
+dateformat=d/B/y @ h:n
+uda.priority.values=H,M,,L
+urgency.uda.priority.H.coefficient=15.0
+urgency.blocking.coefficient=10.0
+urgency.blocked.coefficient=-7.0

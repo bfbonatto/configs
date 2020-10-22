@@ -19,8 +19,6 @@ Plug 'neovimhaskell/haskell-vim'
 
 Plug 'airblade/vim-gitgutter'
 
-Plug 'valloric/youcompleteme'
-
 Plug 'mateusbraga/vim-spell-pt-br'
 
 Plug 'w0rp/ale'
@@ -69,8 +67,6 @@ Plug 'wlangstroth/vim-racket'
 
 Plug 'https://framagit.org/tyreunom/coquille'
 
-Plug 'elmcast/elm-vim'
-
 Plug 'ap/vim-css-color'
 
 Plug 'vimwiki/vimwiki'
@@ -78,6 +74,8 @@ Plug 'vimwiki/vimwiki'
 Plug 'adimit/prolog.vim'
 
 Plug 'unblevable/quick-scope'
+
+Plug 'valloric/youcompleteme'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -247,6 +245,9 @@ nnoremap == 1z=
 let g:airline#extensions#whitespace#checks = ['indent', 'trailing', 'mixed-indent-file', 'conflicts']
 let g:airline_powerline_fonts = 1
 set guifont=Meslo_LG_S_for_Powerline:h11
+
+" TaskWarrior
+let g:task_default_prompt = ['due', 'recur', 'project', 'priority', 'description', 'depends', 'tag']
 
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
