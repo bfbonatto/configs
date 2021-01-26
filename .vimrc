@@ -9,7 +9,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
 
 Plug 'vim-airline/vim-airline'
-
 Plug 'vim-airline/vim-airline-themes'
 
 Plug 'junegunn/goyo.vim'
@@ -65,17 +64,25 @@ Plug 'xolox/vim-misc'
 
 Plug 'wlangstroth/vim-racket'
 
-Plug 'https://framagit.org/tyreunom/coquille'
-
 Plug 'ap/vim-css-color'
 
 Plug 'vimwiki/vimwiki'
 
-Plug 'adimit/prolog.vim'
-
 Plug 'unblevable/quick-scope'
 
 Plug 'valloric/youcompleteme'
+
+Plug 'ayu-theme/ayu-vim'
+
+Plug 'mk12/vim-lean'
+
+Plug 'itchyny/calendar.vim'
+
+"Plug 'tbabej/taskwiki'
+
+Plug 'vim-scripts/AnsiEsc.vim'
+
+Plug 'majutsushi/tagbar'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -110,7 +117,8 @@ let g:pandoc#command#use_message_buffers = 0
 
 inoremap jk <esc>
 inoremap kj <esc>
-inoremap <C-BS> <C-W>
+inoremap <C-j> <esc>o
+
 
 nnoremap Q :close<enter>
 nnoremap <space> W
@@ -118,8 +126,8 @@ nnoremap <space> W
 let mapleader = ";"
 nnoremap , ;
 
-inoremap ;l λ
-inoremap ;. ·
+inoremap \la λ
+inoremap \. ·
 
 augroup coq
 	autocmd!
@@ -134,7 +142,6 @@ nnoremap <leader>d :ALEDetail<enter>
 nnoremap <leader>n :ALENext<enter>zz
 nnoremap <leader>N :ALEPrevious<enter>zz
 
-nnoremap <leader>m :make<enter>
 au FileType pandoc nnoremap <leader>m :Pandoc pdf<enter>
 au FileType vim nnoremap <leader>m :source %<enter> <bar> :PlugInstall<enter>
 
@@ -147,7 +154,7 @@ function! FindMake()
 	endif
 endfunction
 
-nnoremap <leader>g :Git
+nnoremap <leader>g :Git 
 
 nnoremap <leader>R :RainbowToggle<enter>
 
@@ -252,5 +259,7 @@ let g:task_default_prompt = ['due', 'recur', 'project', 'priority', 'description
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
+let ayucolor="dark"
+
 
 syntax enable
