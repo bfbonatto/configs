@@ -54,7 +54,7 @@ Plug 'reedes/vim-wordy'
 
 Plug 'shirk/vim-gas'
 
-Plug 'kh3phr3n/python-syntax'
+Plug 'vim-python/python-syntax'
 
 Plug 'jpalardy/vim-slime'
 
@@ -64,13 +64,12 @@ Plug 'xolox/vim-misc'
 
 Plug 'wlangstroth/vim-racket'
 
-Plug 'ap/vim-css-color'
-
 Plug 'vimwiki/vimwiki'
 
 Plug 'unblevable/quick-scope'
 
-Plug 'valloric/youcompleteme'
+"Plug 'valloric/youcompleteme'
+Plug 'shougo/deoplete.nvim'
 
 Plug 'itchyny/calendar.vim'
 
@@ -79,6 +78,12 @@ Plug 'vim-scripts/AnsiEsc.vim'
 Plug 'majutsushi/tagbar'
 
 Plug 'lervag/vimtex'
+
+Plug 'ledger/vim-ledger'
+
+Plug 'scrooloose/nerdcommenter'
+
+Plug 'shirk/vim-gas'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -94,6 +99,23 @@ colorscheme jellybeans "color theme
 " italized comments
 let g:jellybeans_use_term_italics = 1
 highlight Comment cterm=italic
+
+set tabstop=4 "visual of a tab
+set softtabstop=4 "mechanics of a tab
+set noexpandtab
+set relativenumber
+set number "show line numbers
+set number relativenumber
+
+"setting line wrapping
+set textwidth=0
+set wrap
+set linebreak
+
+"auto indentation
+set shiftwidth=4
+set autoindent
+set smartindent
 
 " ----------------------------------
 " ----------------------------------
@@ -122,24 +144,12 @@ nnoremap <leader>N :ALEPrevious<enter>zz
 nnoremap <leader>g :Git 
 nnoremap <leader>o o<esc>k
 nnoremap <leader>O O<esc>j
+vnoremap <leader>t :Tabularize/
 
+"complete on <tab>
+inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
-set tabstop=4 "visual of a tab
-set softtabstop=4 "mechanics of a tab
-set noexpandtab
-set relativenumber
-set number "show line numbers
-set number relativenumber
-
-"setting line wrapping
-set textwidth=0
-set wrap
-set linebreak
-
-"auto indentation
-set shiftwidth=4
-set autoindent
-set smartindent
 
 "search highlighting
 set hlsearch
@@ -151,11 +161,17 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 " move vertically by visual line
 nnoremap j gj
 nnoremap k gk
+vnoremap j gj
+vnoremap k gk
 " visual movement
 nnoremap $ g$
 nnoremap 0 g0
 nnoremap J j
 nnoremap K k
+vnoremap $ g$
+vnoremap 0 g0
+vnoremap J j
+vnoremap K k
 " move through split panes with ctrl-<button>
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -177,13 +193,23 @@ au FileType ruby let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '
 au FileType markdown let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '$':'$'}
 au FileType scheme let b:AutoPairs = {'(':')', '"': '"', '[':']', '{':'}'}
 
-let g:rainbow_active = 0
-au FileType scheme :RaibowToggleOn<enter>
+" Create default mappings
+let g:NERDCreateDefaultMappings = 1
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 1
+let g:NERDDefaultAlign = 'left'
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+let g:NERDCommentEmptyLines = 1
+let g:NERDTrimTrailingWhitespace = 1
+let g:NERDToggleCheckAllLines = 1
+
+let g:deoplete#enable_at_startup = 1
+
 nnoremap <leader>R :RainbowToggle<enter>
+let g:rainbow_active = 0
 
 augroup scheme
 	autocmd!
-
 	autocmd FileType scheme setlocal ts=2 sts=2 sw=2 expandtab
 augroup end
 
@@ -197,9 +223,9 @@ let g:pandoc#command#use_message_buffers = 0
 inoremap \la λ
 inoremap \. ·
 
+
 augroup coq
 	autocmd!
-	
 	autocmd FileType coq call coquille#Commands()
 	autocmd FileType coq nnoremap <c-j> :CoqNext<enter>
 	autocmd FileType coq nnoremap <c-k> :CoqUndo<enter>
@@ -207,12 +233,14 @@ augroup coq
 augroup end
 
 
-au FileType pandoc nnoremap <leader>m :Pandoc pdf<enter>
-au FileType vim nnoremap <leader>m :source %<enter> <bar> :PlugInstall<enter>
+augroup make
+	autocmd!
+	au FileType pandoc nnoremap <leader>m :Pandoc pdf<enter>
+	au FileType vim nnoremap <leader>m :source %<enter> <bar> :PlugInstall<enter>
+augroup end
 
 augroup tex
 	autocmd!
-
 	au FileType tex nnoremap <leader>li :VimtexInfo<enter>
 	au FileType tex nnoremap <leader>lt :VimtexTocToggle<enter>
 	au FileType tex nnoremap <leader>lv :VimtexView<enter>
@@ -226,9 +254,11 @@ augroup end
 "tabs > spaces
 augroup python
 	autocmd!
-
 	autocmd FileType python setlocal ts=4 sts=4 sw=4 noexpandtab
 augroup end
+" let g:pymode_options = 0
+" let g:pymode_options_colorclumn = 0
+
 
 let python_highlight_all = 1
 let g:python3_host_prog = '/Users/bfbonatto/.pyenv/shims/python'
@@ -240,9 +270,14 @@ let g:slime_target = "tmux"
 let g:slime_paste_file = "$HOME/.slime_paste"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{right-of}"}
 
-au FileType haskell nnoremap <buffer> <leader>f :HdevtoolsType<CR>
-au FileType haskell nnoremap <buffer> <silent> <leader>t :HdevtoolsInfo<CR>
-au FileType haskell nnoremap <buffer> <silent> <leader>c :HdevtoolsClear<CR>
+augroup haskell
+	autocmd!
+	au FileType haskell nnoremap <buffer> <leader>f :HdevtoolsType<CR>
+	au FileType haskell nnoremap <buffer> <silent> <leader>t :HdevtoolsInfo<CR>
+	au FileType haskell nnoremap <buffer> <silent> <leader>c :HdevtoolsClear<CR>
+augroup end
+
+let g:hdevtools_stack = 1
 
 
 "better highlighting
@@ -267,10 +302,15 @@ autocmd! User GoyoLeave Limelight!
 
 let g:limelight_conceal_ctermfg = 'gray'
 
-
-let g:airline#extensions#whitespace#checks = ['indent', 'trailing', 'mixed-indent-file', 'conflicts']
+let g:airline#extensions#whitespace#checks = ['trailing', 'conflicts']
+let g:airline#extensions#nerdtree_status = 1
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#nerdtree_status = 1
+let g:airline#extensions#tagbar#enabled = 1
+let g:airline#extensions#vimtex#enabled = 1
+let g:airline#extensions#ycm#enabled = 1
 let g:airline_powerline_fonts = 1
-set guifont=Meslo_LG_S_for_Powerline:h11
+set guifont=DejaVuSansMono_Nerd_Font_Mono:h11
 
 " TaskWarrior
 let g:task_default_prompt = ['due', 'recur', 'project', 'priority', 'description', 'depends', 'tag']

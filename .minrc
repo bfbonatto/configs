@@ -1,69 +1,83 @@
 " Plugins will be downloaded under the specified directory.
 call plug#begin('~/.vim/plugged')
-
 Plug 'sjl/badwolf'
-
 Plug 'jiangmiao/auto-pairs'
-
 Plug 'scrooloose/nerdtree'
-
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-
 Plug 'airblade/vim-gitgutter'
-
 Plug 'mateusbraga/vim-spell-pt-br'
-
 Plug 'christoomey/vim-tmux-navigator'
-
 Plug 'ryanoasis/vim-devicons'
-
 Plug 'luochen1990/rainbow'
-
 Plug 'octol/vim-cpp-enhanced-highlight'
-
+Plug 'neovimhaskell/haskell-vim'
 Plug 'tpope/vim-surround'
-
 Plug 'easymotion/vim-easymotion'
-
 Plug 'tpope/vim-fugitive'
-
 Plug 'tpope/vim-surround'
-
 Plug 'xolox/vim-misc'
-
+Plug 'godlygeek/tabular'
+Plug 'shirk/vim-gas'
+Plug 'vim-python/python-syntax'
+Plug 'unblevable/quick-scope'
+Plug 'scrooloose/nerdcommenter'
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
 filetype plugin indent on	" required
 
-colorscheme badwolf
+" ----------------------------------
+"				Visuals
+" ----------------------------------
 
-au FileType ruby let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '|':'|', '/':'/'}
-au FileType markdown let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '$':'$'}
-au FileType scheme let b:AutoPairs = {'(':')', '"': '"', '[':']', '{':'}'}
+colorscheme badwolf "color theme
 
-set backspace=indent,eol,start
-set clipboard=unnamedplus
+" italized comments
+highlight Comment cterm=italic
+
+set tabstop=4 "visual of a tab
+set softtabstop=4 "mechanics of a tab
+set noexpandtab
+set relativenumber
+set number "show line numbers
+set number relativenumber
+
+"setting line wrapping
+set textwidth=0
+set wrap
+set linebreak
+
+" ----------------------------------
+" ----------------------------------
+
+
+" ----------------------------------
+"		Basic Functionality
+" ----------------------------------
+
+set backspace=indent,eol,start	"backspace deletes from preceding line
+set clipboard=unnamedplus		"clipboard from-to outside vim
 
 inoremap jk <esc>
 inoremap kj <esc>
 
+inoremap <C-j> <esc>o
+
 nnoremap Q :close<enter>
+command! Indent %s/    /\t/g
 
 let mapleader = ";"
 nnoremap , ;
 
 nnoremap <leader>g :Git 
-
 nnoremap <leader>o o<esc>k
 nnoremap <leader>O O<esc>j
+vnoremap <leader>t :Tabularize/
 
-set tabstop=4 "visual of a tab
-set softtabstop=4 "mechanics of a tab
-set relativenumber
-set number "show line numbers
-set number relativenumber
+"complete on <tab>
+inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 "setting line wrapping
 set textwidth=0
@@ -79,14 +93,23 @@ set smartindent
 set hlsearch
 set incsearch
 nnoremap <CR> :noh<CR>
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " movement mappings
 " move vertically by visual line
 nnoremap j gj
 nnoremap k gk
+vnoremap j gj
+vnoremap k gk
 " visual movement
 nnoremap $ g$
 nnoremap 0 g0
+nnoremap J j
+nnoremap K k
+vnoremap $ g$
+vnoremap 0 g0
+vnoremap J j
+vnoremap K k
 " move through split panes with ctrl-<button>
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -96,13 +119,58 @@ nnoremap <C-H> <C-W><C-H>
 nnoremap <c-w>v :vsp <enter>
 nnoremap <c-w>z :sp <enter>
 
+" spell checking
+" C-l replaces last misspelled word with the fist suggestion
 inoremap <C-l> <c-g>u<Esc>[s1z=`]<c-g>a
+" replaces word under cursor with first suggestion
 nnoremap == 1z=
+" ----------------------------------
+" ----------------------------------
 
-let g:airline#extensions#whitespace#checks = ['indent', 'trailing', 'mixed-indent-file', 'conflicts']
+au FileType ruby let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '|':'|', '/':'/'}
+au FileType markdown let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '$':'$'}
+au FileType scheme let b:AutoPairs = {'(':')', '"': '"', '[':']', '{':'}'}
+
+" Create default mappings
+let g:NERDCreateDefaultMappings = 1
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 1
+let g:NERDDefaultAlign = 'left'
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+let g:NERDCommentEmptyLines = 1
+let g:NERDTrimTrailingWhitespace = 1
+let g:NERDToggleCheckAllLines = 1
+
+let g:deoplete#enable_at_startup = 1
+
+nnoremap <leader>R :RainbowToggle<enter>
+let g:rainbow_active = 0
+
+augroup scheme
+	autocmd!
+	autocmd FileType scheme setlocal ts=2 sts=2 sw=2 expandtab
+augroup end
+"tabs > spaces
+augroup python
+	autocmd!
+	autocmd FileType python setlocal ts=4 sts=4 sw=4 noexpandtab
+augroup end
+
+let python_highlight_all = 1
+let g:python3_host_prog = '/Users/bfbonatto/.pyenv/shims/python'
+"better highlighting
+let g:cpp_class_scope_highlight = 1
+let g:cpp_class_decl_highlight = 1
+
+let g:airline#extensions#whitespace#checks = ['trailing', 'conflicts']
+let g:airline#extensions#nerdtree_status = 1
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#nerdtree_status = 1
+let g:airline#extensions#tagbar#enabled = 1
+let g:airline#extensions#vimtex#enabled = 1
+let g:airline#extensions#ycm#enabled = 1
 let g:airline_powerline_fonts = 1
-set guifont=Meslo_LG_S_for_Powerline:h11
-
+set guifont=DejaVuSansMono_Nerd_Font_Mono:h11
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
