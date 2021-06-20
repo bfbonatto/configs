@@ -20,7 +20,8 @@ Plug 'airblade/vim-gitgutter'
 
 Plug 'mateusbraga/vim-spell-pt-br'
 
-Plug 'w0rp/ale'
+"Plug 'w0rp/ale'
+Plug 'neoclide/coc.nvim'
 
 Plug 'christoomey/vim-tmux-navigator'
 
@@ -37,14 +38,11 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 
 Plug 'blindfs/vim-taskwarrior'
 
-Plug 'bitc/vim-hdevtools'
-
 Plug 'tpope/vim-surround'
 
 Plug 'easymotion/vim-easymotion'
 
 Plug 'leafgarland/typescript-vim'
-Plug 'kchmck/vim-coffee-script'
 
 Plug 'tpope/vim-fugitive'
 
@@ -62,16 +60,9 @@ Plug 'xolox/vim-easytags'
 
 Plug 'xolox/vim-misc'
 
-Plug 'wlangstroth/vim-racket'
-
-Plug 'vimwiki/vimwiki'
-
 Plug 'unblevable/quick-scope'
 
-"Plug 'valloric/youcompleteme'
-Plug 'shougo/deoplete.nvim'
-
-Plug 'itchyny/calendar.vim'
+"Plug 'shougo/deoplete.nvim'
 
 Plug 'vim-scripts/AnsiEsc.vim'
 
@@ -82,8 +73,6 @@ Plug 'lervag/vimtex'
 Plug 'ledger/vim-ledger'
 
 Plug 'scrooloose/nerdcommenter'
-
-Plug 'shirk/vim-gas'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -138,17 +127,13 @@ nnoremap Q :close<enter>
 let mapleader = ";"
 nnoremap , ;
 
-nnoremap <leader>d :ALEDetail<enter>
-nnoremap <leader>n :ALENext<enter>zz
-nnoremap <leader>N :ALEPrevious<enter>zz
+" nnoremap <leader>d :ALEDetail<enter>
+" nnoremap <leader>n :ALENext<enter>zz
+" nnoremap <leader>N :ALEPrevious<enter>zz
 nnoremap <leader>g :Git 
 nnoremap <leader>o o<esc>k
 nnoremap <leader>O O<esc>j
 vnoremap <leader>t :Tabularize/
-
-"complete on <tab>
-inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 
 "search highlighting
@@ -203,7 +188,62 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 let g:NERDToggleCheckAllLines = 1
 
-let g:deoplete#enable_at_startup = 1
+" ---------------------
+"  Completion sutff
+"  --------------------
+" let g:deoplete#enable_at_startup = 1
+
+set hidden
+set nobackup
+set nowritebackup
+" set cmdheight=2
+set updatetime=300
+set shortmess+=c
+if has("nvim-0.5.0") || has("patch-8.1.1564")
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+nmap <silent> <leader>N <Plug>(coc-diagnostic-prev)
+nmap <silent> <leader>n <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gt <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Applying codeAction to the selected region.
+xmap <leader>a  <Plug>(coc-codeaction-cursor)
+nmap <leader>a  <Plug>(coc-codeaction-cursor)
+
+" Remap <C-f> and <C-s> for scroll float windows/popups.
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-s> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-s> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-s> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
+
+"complete on <tab>
+" inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+" inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
 
 nnoremap <leader>R :RainbowToggle<enter>
 let g:rainbow_active = 0
@@ -235,7 +275,7 @@ augroup end
 
 augroup make
 	autocmd!
-	au FileType pandoc nnoremap <leader>m :Pandoc pdf<enter>
+	au FileType pandoc nnoremap <leader>m :Pandoc pdf --citeproc<enter>
 	au FileType vim nnoremap <leader>m :source %<enter> <bar> :PlugInstall<enter>
 augroup end
 
@@ -252,15 +292,17 @@ augroup end
 
 
 "tabs > spaces
-augroup python
+augroup tabs
 	autocmd!
 	autocmd FileType python setlocal ts=4 sts=4 sw=4 noexpandtab
+	autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
 augroup end
 " let g:pymode_options = 0
 " let g:pymode_options_colorclumn = 0
 
 
-let python_highlight_all = 1
+let g:python_highlight_indent_errors = 0
+let g:python_highlight_all = 1
 let g:python3_host_prog = '/Users/bfbonatto/.pyenv/shims/python'
 
 command! Indent %s/    /\t/g
@@ -270,14 +312,14 @@ let g:slime_target = "tmux"
 let g:slime_paste_file = "$HOME/.slime_paste"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{right-of}"}
 
-augroup haskell
-	autocmd!
-	au FileType haskell nnoremap <buffer> <leader>f :HdevtoolsType<CR>
-	au FileType haskell nnoremap <buffer> <silent> <leader>t :HdevtoolsInfo<CR>
-	au FileType haskell nnoremap <buffer> <silent> <leader>c :HdevtoolsClear<CR>
-augroup end
-
-let g:hdevtools_stack = 1
+" augroup haskell
+"     autocmd!
+"     au FileType haskell nnoremap <buffer> <leader>f :HdevtoolsType<CR>
+"     au FileType haskell nnoremap <buffer> <silent> <leader>t :HdevtoolsInfo<CR>
+"     au FileType haskell nnoremap <buffer> <silent> <leader>c :HdevtoolsClear<CR>
+" augroup end
+"
+" let g:hdevtools_stack = 1
 
 
 "better highlighting
@@ -286,15 +328,15 @@ let g:cpp_class_decl_highlight = 1
 
 
 let g:haskell_indent_disable = 1 "disbles haskellvim's auto indentation
-let g:ycm_autoclose_preview_window_after_completion = 1
+" let g:ycm_autoclose_preview_window_after_completion = 1
 "let g:ycm_exclude_preview = 1
 "let g:airline_exclude_preview = 1
 
 
-let g:ale_linters = {'haskell': ['hdevtools', 'hlint'], 'python': ['pylint', 'mypy'], 'asm':[]}
-let g:ale_fixers = {'haskell': ['hlint']}
-
-let g:ale_echo_msg_format = "%linter%: %code: %%s"
+" let g:ale_linters = {'haskell': ['hdevtools', 'hlint'], 'python': ['pylint','mypy'], 'asm':[]}
+" let g:ale_fixers = {'haskell': ['hlint']}
+"
+" let g:ale_echo_msg_format = "%linter%: %code: %%s"
 
 
 autocmd! User GoyoEnter Limelight "Goyo integration
@@ -310,6 +352,7 @@ let g:airline#extensions#tagbar#enabled = 1
 let g:airline#extensions#vimtex#enabled = 1
 let g:airline#extensions#ycm#enabled = 1
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#scrollbar#enabled = 0
 set guifont=DejaVuSansMono_Nerd_Font_Mono:h11
 
 " TaskWarrior
