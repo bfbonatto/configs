@@ -110,8 +110,6 @@ alias news="newsboat"
 test -r /Users/bfbonatto/.opam/opam-init/init.zsh && . /Users/bfbonatto/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
 # github token
-export HOMEBREW_GITHUB_API_TOKEN=3d6911ac4341a5d649d3b618c628e69e2a104694
-export GIT_API_TOKEN=0285ce53a551d3d18af9829c43277e2b5091f48a
 
 eval "$(pyenv init -)"
 
@@ -119,8 +117,3 @@ bindkey -v
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
-
-export LEDGER_FILE=~/Documents/finance/2021.journal
-export PATH=/usr/local/bin:$PATH
-export PATH=/Users/bfbonatto/.pyenv/shims:$PATH
-[ -f "/Users/bfbonatto/.ghcup/env" ] && source "/Users/bfbonatto/.ghcup/env" # ghcup-env
