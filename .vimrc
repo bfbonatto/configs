@@ -20,8 +20,7 @@ Plug 'airblade/vim-gitgutter'
 
 Plug 'mateusbraga/vim-spell-pt-br'
 
-"Plug 'w0rp/ale'
-Plug 'neoclide/coc.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'christoomey/vim-tmux-navigator'
 
@@ -62,8 +61,6 @@ Plug 'xolox/vim-misc'
 
 Plug 'unblevable/quick-scope'
 
-"Plug 'shougo/deoplete.nvim'
-
 Plug 'vim-scripts/AnsiEsc.vim'
 
 Plug 'majutsushi/tagbar'
@@ -73,6 +70,10 @@ Plug 'lervag/vimtex'
 Plug 'ledger/vim-ledger'
 
 Plug 'scrooloose/nerdcommenter'
+
+Plug 'Julian/lean.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'neovim/nvim-lspconfig'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -126,6 +127,7 @@ nnoremap Q :close<enter>
 
 let mapleader = ";"
 nnoremap , ;
+let maplocalleader = "'"
 
 " nnoremap <leader>d :ALEDetail<enter>
 " nnoremap <leader>n :ALENext<enter>zz
@@ -191,7 +193,6 @@ let g:NERDToggleCheckAllLines = 1
 " ---------------------
 "  Completion sutff
 "  --------------------
-" let g:deoplete#enable_at_startup = 1
 
 set hidden
 set nobackup
@@ -217,15 +218,18 @@ nmap <silent> gr <Plug>(coc-references)
 xmap <leader>a  <Plug>(coc-codeaction-cursor)
 nmap <leader>a  <Plug>(coc-codeaction-cursor)
 
+
+
 " Remap <C-f> and <C-s> for scroll float windows/popups.
-if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-s> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-s> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-s> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-endif
+" nnoremap <silent><nowait><expr> <c-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<c-f>"
+" nnoremap <silent><nowait><expr> <c-s> coc#float#has_scroll() ? coc#float#scroll(0) : "\<c-b>"
+" inoremap <silent><nowait><expr> <c-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+" inoremap <silent><nowait><expr> <c-s> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+" vnoremap <silent><nowait><expr> <c-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<c-f>"
+" vnoremap <silent><nowait><expr> <c-s> coc#float#has_scroll() ? coc#float#scroll(0) : "\<c-b>"
+
+inoremap <silent><nowait><expr> <c-f> coc#float#scroll(1)
+inoremap <silent><nowait><expr> <c-s> coc#float#scroll(0)
 
 "complete on <tab>
 " inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
@@ -264,13 +268,13 @@ inoremap \la λ
 inoremap \. ·
 
 
-augroup coq
-	autocmd!
-	autocmd FileType coq call coquille#Commands()
-	autocmd FileType coq nnoremap <c-j> :CoqNext<enter>
-	autocmd FileType coq nnoremap <c-k> :CoqUndo<enter>
-	autocmd FileType coq inoremap <c-j> <esc>:CoqNext<enter>a
-augroup end
+" augroup coq
+"     autocmd!
+"     autocmd FileType coq call coquille#Commands()
+"     autocmd FileType coq nnoremap <c-j> :CoqNext<enter>
+"     autocmd FileType coq nnoremap <c-k> :CoqUndo<enter>
+"     autocmd FileType coq inoremap <c-j> <esc>:CoqNext<enter>a
+" augroup end
 
 
 augroup make
@@ -278,6 +282,10 @@ augroup make
 	au FileType pandoc nnoremap <leader>m :Pandoc pdf --citeproc<enter>
 	au FileType vim nnoremap <leader>m :source %<enter> <bar> :PlugInstall<enter>
 augroup end
+
+let g:table_mode_corner='+'
+let g:table_mode_corner_corner='+'
+let g:table_mode_header_fillchar='='
 
 augroup tex
 	autocmd!
@@ -295,11 +303,9 @@ augroup end
 augroup tabs
 	autocmd!
 	autocmd FileType python setlocal ts=4 sts=4 sw=4 noexpandtab
+	autocmd FileType rust setlocal ts=4 sts=4 sw=4 noexpandtab
 	autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
 augroup end
-" let g:pymode_options = 0
-" let g:pymode_options_colorclumn = 0
-
 
 let g:python_highlight_indent_errors = 0
 let g:python_highlight_all = 1
@@ -312,15 +318,6 @@ let g:slime_target = "tmux"
 let g:slime_paste_file = "$HOME/.slime_paste"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{right-of}"}
 
-" augroup haskell
-"     autocmd!
-"     au FileType haskell nnoremap <buffer> <leader>f :HdevtoolsType<CR>
-"     au FileType haskell nnoremap <buffer> <silent> <leader>t :HdevtoolsInfo<CR>
-"     au FileType haskell nnoremap <buffer> <silent> <leader>c :HdevtoolsClear<CR>
-" augroup end
-"
-" let g:hdevtools_stack = 1
-
 
 "better highlighting
 let g:cpp_class_scope_highlight = 1
@@ -328,16 +325,6 @@ let g:cpp_class_decl_highlight = 1
 
 
 let g:haskell_indent_disable = 1 "disbles haskellvim's auto indentation
-" let g:ycm_autoclose_preview_window_after_completion = 1
-"let g:ycm_exclude_preview = 1
-"let g:airline_exclude_preview = 1
-
-
-" let g:ale_linters = {'haskell': ['hdevtools', 'hlint'], 'python': ['pylint','mypy'], 'asm':[]}
-" let g:ale_fixers = {'haskell': ['hlint']}
-"
-" let g:ale_echo_msg_format = "%linter%: %code: %%s"
-
 
 autocmd! User GoyoEnter Limelight "Goyo integration
 autocmd! User GoyoLeave Limelight!
@@ -363,3 +350,14 @@ let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
 
 syntax enable
+
+function LeanSetup()
+lua << Lean
+	local lean = require('lean')
+	lean.setup({lsp = { on_attach = on_attach }, lsp3 = { on_attach = on_attach }, mappings = true, abbreviations = {builtin = true, }, infoview = {autoopen = false, width = 50,},})
+Lean
+	e %
+endfunction
+
+autocmd FileType lean call LeanSetup()
+autocmd FileType lean3 call LeanSetup()
