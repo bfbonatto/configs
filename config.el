@@ -22,7 +22,7 @@
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
-(setq doom-font(font-spec :family "DejaVuSansMono Nerd Font Mono" :size 12 :slant 'normal))
+(setq doom-font(font-spec :family "DejaVuSansMono Nerd Font" :size 12 :slant 'normal))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -35,20 +35,74 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type 'relative)
+(setq display-line-numbers-type 'visual)
 
 (setq-default indent-tabs-mode t)
 
-(setq tab-width 4)
+(setq! tab-width 4)
 (setq-default tab-width 4)
+
+(global-prettify-symbols-mode)
+
+(add-hook! python-mode
+  (add-to-list 'prettify-symbols-alist '("int" . 8484))
+  (add-to-list 'prettify-symbols-alist '("float" . 8477))
+  (add-to-list 'prettify-symbols-alist '("in" . 8712))
+  (add-to-list 'prettify-symbols-alist '("inf" . 8734))
+  (add-to-list 'prettify-symbols-alist '("<=" . 8804))
+  (add-to-list 'prettify-symbols-alist '(">=" . 8805))
+  (add-to-list 'prettify-symbols-alist '("->" . 8594))
+  (add-to-list 'prettify-symbols-alist '("def" . 402))
+  (add-to-list 'prettify-symbols-alist '("not" . 172))
+  (add-to-list 'prettify-symbols-alist '("!=" . 8800)))
+
+(add-hook! haskell-mode
+  (add-to-list 'prettify-symbols-alist '("Int" . 8484))
+  (add-to-list 'prettify-symbols-alist '("Float" . 8477))
+  (add-to-list 'prettify-symbols-alist '("elem" . 8712))
+  (add-to-list 'prettify-symbols-alist '("<=" . 8804))
+  (add-to-list 'prettify-symbols-alist '(">=" . 8805))
+  (add-to-list 'prettify-symbols-alist '("->" . 8594))
+  (add-to-list 'prettify-symbols-alist '("<-" . 8592))
+  (add-to-list 'prettify-symbols-alist '("=>" . 8658))
+  (add-to-list 'prettify-symbols-alist '("Bool" . 914))
+  (add-to-list 'prettify-symbols-alist '("not" . 172))
+  (add-to-list 'prettify-symbols-alist '("&&" . 8743))
+  (add-to-list 'prettify-symbols-alist '("||" . 8744))
+  (add-to-list 'prettify-symbols-alist '("\\" . 955))
+  (add-to-list 'prettify-symbols-alist '("." . 8729))
+  (add-to-list 'prettify-symbols-alist '("/=" . 8800)))
+
+(add-hook! coq-mode :append
+  (setf (alist-get "bool" prettify-symbols-alist nil 'remove 'string=) 914))
+
 
 (display-time)
 (display-battery-mode)
+(setq doom-modeline-enable-word-count t)
 
 (smartparens-global-mode)
 
 (map! :desc "Goto end of line" :i "C-l" #'evil-append-line)
 (map! :desc "End line with return" :i "C-j" (cmd! (evil-append-line 1) (newline) (indent-according-to-mode)))
+
+(setq mac-option-key-is-meta nil)
+(setq mac-command-key-is-meta t)
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier nil)
+(add-to-list 'initial-frame-alist '(fullscreen . fullscreen))
+
+
+;;(setq! vimish-fold-show-lines nil)
+;;(custom-set-faces!
+;;  '(vimish-fold-overlay :inherit nil)
+;;  '(vimish-fold-mouse-face :inherit nil :weight normal))
+
+
+(global-evil-quickscope-mode t)
+
+(add-hook! hy-mode
+  (add-to-list '+eval-repls '(hy-mode run-hy :persist t)))
 
 ;; here are some additional functions/macros that could help you configure Doom:
 ;;
