@@ -12,13 +12,15 @@
 (package! ujelly-theme)
 (package! badwolf-theme)
 (package! lsp-python-ms)
-(package! evil-quickscope)
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
 ;; https://github.com/raxod502/straight.el#the-recipe-format
 ;(package! another-package
 ;  :recipe (:host github :repo "username/repo"))
+
+;; (package! jelly-plus
+;;   :recipe (:host github :repo "jsmestad/jellybeans-plus-theme"))
 
 ;; If the package you are trying to install does not contain a PACKAGENAME.el
 ;; file, or is located in a subdirectory of the repo, you'll need to specify
