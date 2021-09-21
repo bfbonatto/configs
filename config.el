@@ -43,6 +43,7 @@
 (setq! tab-width 4)
 (setq-default tab-width 4)
 
+
 (global-prettify-symbols-mode)
 
 (add-hook! python-mode
@@ -66,7 +67,6 @@
   (add-to-list 'prettify-symbols-alist '("->" . 8594))
   (add-to-list 'prettify-symbols-alist '("<-" . 8592))
   (add-to-list 'prettify-symbols-alist '("=>" . 8658))
-  (add-to-list 'prettify-symbols-alist '("Bool" . 914))
   (add-to-list 'prettify-symbols-alist '("not" . 172))
   (add-to-list 'prettify-symbols-alist '("&&" . 8743))
   (add-to-list 'prettify-symbols-alist '("||" . 8744))
@@ -77,6 +77,7 @@
 (add-hook! coq-mode :append
   (setf (alist-get "bool" prettify-symbols-alist nil 'remove 'string=) 914))
 
+(add-to-list 'auto-mode-alist '("\\.pddl\\'" . scheme-mode))
 
 (display-time)
 (display-battery-mode)
