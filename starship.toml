@@ -1,0 +1,6 @@
+"$schema" = 'https://starship.rs/config-shcema.json'
+
+add_newline = true
+
+[package]
+disabled = true
